@@ -353,12 +353,12 @@ export default class BaseStreamController
     this.initPTS = [];
   }
 
-  protected loadAndCachePreloadHint(details: LevelDetails): void {
+  protected cachePreloadHint(details: LevelDetails): void {
     const data = details.preloadData;
     if (!data) {
       return;
     }
-    this.fragmentPreloader.preload(data.frag, data.part);
+    this.fragmentPreloader.cache(data.frag, data.part);
   }
 
   protected onHandlerDestroying() {
@@ -819,10 +819,9 @@ export default class BaseStreamController
             loadedEndOfParts &&
             this.hls.lowLatencyMode &&
             details?.live &&
-            details.canBlockReload &&
-            !this.fragmentPreloader.loading
+            details.canBlockReload
           ) {
-            this.loadAndCachePreloadHint(details);
+            this.cachePreloadHint(details);
           }
           // Fragment hint has no parts
           return Promise.resolve(null);
